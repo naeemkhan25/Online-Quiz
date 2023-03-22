@@ -13,6 +13,10 @@ wp_enqueue_script(
     HDQ_PLUGIN_VERSION,
     true
 );
+wp_localize_script( 'hdq_admin_script', 'hdq_admin_script', [
+    'ajax_url'       => admin_url( 'admin-ajax.php' ),
+    'security'       => wp_create_nonce( 'hdq_nonce' ),
+] );
 
 $buildQuiz = true;
 
@@ -44,7 +48,7 @@ if (!is_singular() && HDQ_REDIRECT) {
         // depending on .htaccess mapping or firewalls before WP loads
         if (is_plugin_active('elementor/elementor.php')) {
             if (\Elementor\Plugin::$instance->editor->is_edit_mode()) {
-                echo '<div class = "hdq_elementor_block" style = "padding: 2em; border: 1px dashed #999; background-color: rgba(255,255,255,0.1)"><p><strong>HD Quiz</strong>: This section is only visible because you are in Elementor\'s live edit mode, and will be replaced with the correct quiz on the public page/post.</p></div>';
+                echo '<div class = "hdq_elementor_block" style = "padding: 2em; border: 1px dashed #999; background-color: rgba(255,255,255,0.1)"><p><strong>Online Quiz</strong>: This section is only visible because you are in Elementor\'s live edit mode, and will be replaced with the correct quiz on the public page/post.</p></div>';
                 $buildQuiz = false;
             }
         }
@@ -64,20 +68,22 @@ if ($buildQuiz === true) {
     $quiz_name = $quiz_name->name;
 
     $quiz_settings = get_hdq_quiz($quiz_ID);
-
     // get question order for query
     $question_order = "menu_order"; // default
+    $ordering_value =  array_key_exists('randomize_questions',$quiz_settings) ? $quiz_settings["randomize_questions"]["value"][0]: 'no';
+    $pool_question = array_key_exists('pool_of_questions',$quiz_settings) ? $quiz_settings["pool_of_questions"]["value"]: 0;
     if (
-        $quiz_settings["randomize_questions"]["value"][0] === "yes" ||
-        $quiz_settings["pool_of_questions"]["value"] > 0
+        $ordering_value === "yes" ||
+        $pool_question > 0
     ) {
         $question_order = "rand";
     }
 
     $per_page = -1; // show all questions by default
     $paginate = false;
-    if ($quiz_settings["wp_paginate"]["value"] > 0) {
-        if ($quiz_settings["pool_of_questions"]["value"] > 0) {
+    $pagination = array_key_exists('wp_paginate',$quiz_settings) ? $quiz_settings["wp_paginate"]["value"]: 0;
+    if ($pagination > 0) {
+        if ($pool_question > 0) {
             return;
         } else {
             $paginate = true;
@@ -86,7 +92,7 @@ if ($buildQuiz === true) {
         }
     }
 
-    if ($quiz_settings["pool_of_questions"]["value"] > 0) {
+    if ( $pool_question > 0) {
         $per_page = $quiz_settings["pool_of_questions"]["value"];
     }
 
@@ -170,11 +176,18 @@ if ($buildQuiz === true) {
     do_action("hdq_init", $hdq_local_vars); // add functions to quiz init
     $hdq_local_vars = json_encode($hdq_local_vars);
     wp_localize_script('hdq_admin_script', 'hdq_local_vars', array($hdq_local_vars));
+    $current_user_id = get_current_user_id();
+    if ( !$current_user_id) {
+        return false;
+    }
 ?>
-
     <div class="hdq_quiz_wrapper" id="hdq_<?php echo $quiz_ID; ?>">
         <div class="hdq_before">
             <?php do_action("hdq_before", $quiz_ID); ?>
+            <h1 class="hdq_question" style="text-align:center"><?php echo $quiz_name;?></h1>
+        </div>
+        <div class="hdq_before">
+            <h1 class="hdq_already_submit" style="text-align:center;color:red;display:none">You Already Submited</h1>
         </div>
 
         <?php
@@ -182,6 +195,8 @@ if ($buildQuiz === true) {
         <div class="hdq_quiz" <?php if ($quiz_settings["quiz_timer"]["value"] > 3 && $use_adcode !== true) {
                                     echo 'style = "display:none;"';
                                 } ?>>
+            <input type="hidden" name="hdq_current_user_id" id="hdq_current_user_id" value="<?php echo $current_user_id; ?>" />
+            <input type="hidden" name="hdq_current_term_name" id="hdq_current_term_name" value="<?php echo $quiz_name; ?>" />
             <?php
             if ($quiz_settings["results_position"]["value"] != "below") {
                 hdq_get_results($quiz_settings);
@@ -247,7 +262,8 @@ if ($buildQuiz === true) {
 
                     // deal with randomized answer order here,
                     // so that you don't have to in your custom question type functions
-                    $ans_cor = hdq_get_question_answers($question["answers"]["value"], $question["selected"]["value"], $quiz_settings["randomize_answers"]["value"][0]);
+                    $answer_values = $ordering_value =  array_key_exists('randomize_answers',$quiz_settings) ? $quiz_settings["randomize_answers"]["value"][0]: 'no';
+                    $ans_cor = hdq_get_question_answers($question["answers"]["value"], $question["selected"]["value"], $answer_values);
                     $question["answers"]["value"] = $ans_cor;
                     if ($question["question_type"]["value"] === "multiple_choice_text") {
                         hdq_multiple_choice_text($question_ID, $i, $question, $quiz_settings);

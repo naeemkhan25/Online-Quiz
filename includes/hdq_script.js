@@ -1,10 +1,8 @@
 console.log("Online Quiz 1.0.0 Loaded");
-var hdq_security_nonce = hdq_admin_script.security;
-
 const HDQ = {
 	EL: {
 		quizzes: document.getElementsByClassName("hdq_quiz"),
-		results: document.getElementsByClassName("hdq_results_wrapper")[0],
+		results: document.getElementsByClassName("order-sync-with-google-sheets-for-woocommerce-ultimate")[0],
 		questions: document.getElementsByClassName("hdq_question"),
 		next: document.getElementsByClassName("hdq_next"),
 		finish: document.getElementsByClassName("hdq_finsh_button"),
@@ -95,7 +93,7 @@ const HDQ = {
 		init: function () {
 			try {
 				this.remove();
-				let results_wrapper = document.getElementsByClassName("hdq_results_wrapper")[0];
+				let results_wrapper = document.getElementsByClassName("order-sync-with-google-sheets-for-woocommerce-ultimate")[0];
 				let next_el = results_wrapper.nextSibling.nextSibling;
 				if (next_el.classList.contains("hdq_jPaginate")) {
 					next_el.getElementsByClassName("hdq_next_button")[0].click();
@@ -623,40 +621,12 @@ const HDQ = {
 				total_questions -= 1;
 			}
 		}
+
 		HDQ.VARS.hdq_score = [parseInt(total_score), parseInt(total_questions)];
-		var current_user_id = jQuery('#hdq_current_user_id').val();
-		var current_quiz_name = jQuery('#hdq_current_term_name').val();
-		var data = {
-            action: 'hdq_report_update',
-            nonce_validationd:hdq_security_nonce,
-			current_user_id:current_user_id,
-			current_quiz_name:current_quiz_name,
-			answer_data:HDQ.VARS.hdq_score
-        };
-        jQuery.ajax({
-            type: 'post',
-            url: hdq_admin_script.ajax_url,
-            data: data,
-            beforeSend: function (response) {
-				
-            }, 
-            complete: function (response) {
-				if(response.success == false) {
-					jQuery('.hdq_already_submit').css('display', 'block');
-				}
-            },
-
-            success: function (response) {
-				if(response.success == false) {
-					jQuery('.hdq_already_submit').css('display', 'block');
-				}
-            },
-
-        });
 		return HDQ.VARS.hdq_score;
-
 	},
 	submit: async function (el) {
+		console.log('naee');
 		if (el === null || typeof el.getAttribute("id") === "undfined") {
 			el = document.getElementsByClassName("hdq_finsh_button")[0];
 		}
@@ -687,6 +657,7 @@ const HDQ = {
 		// figure out the score
 		let score = await HDQ.calculateScore();
 		let data = score[0] + " / " + score[1];
+        console.log(data);
 
 		// update results section
 		if (jQuery(".hdq_results_inner .hdq_result .hdq_result_percent")[0]) {
@@ -708,7 +679,7 @@ const HDQ = {
 		if (HDQ.VARS.share_results === "yes") {
 			HDQ.share();
 		}
-		jQuery(".hdq_results_wrapper").fadeIn();
+		jQuery(".order-sync-with-google-sheets-for-woocommerce-ultimate").fadeIn();
 
 		if (typeof HDQ.VARS.submit_actions != undefined && HDQ.VARS.submit_actions != null) {
 			for (let i = 0; i < HDQ.VARS.submit_actions.length; i++) {
@@ -802,7 +773,7 @@ const HDQ = {
 			.nextUntil("#hdq_" + hdq_form_id + " .hdq_jPaginate ")
 			.show()
 			.css("display", style);
-		jQuery(".hdq_results_wrapper").hide(); // in case the results are below the quiz
+		jQuery(".order-sync-with-google-sheets-for-woocommerce-ultimate").hide(); // in case the results are below the quiz
 		HDQ.VARS.jPage = parseInt(HDQ.VARS.jPage + 1);
 
 		if (HDQ.VARS.jPage === HDQ.EL.jPaginate.length) {
@@ -860,7 +831,7 @@ const HDQ = {
 				console.log(hdq_quiz_container);
 
 				if (hdq_quiz_container[0].tagName === "DIV") {
-					hdq_top = jQuery(hdq_quiz_container).scrollTop() + jQuery(".hdq_results_wrapper").offset().top - jQuery(".hdq_results_wrapper").height() / 2 - 100;
+					hdq_top = jQuery(hdq_quiz_container).scrollTop() + jQuery(".order-sync-with-google-sheets-for-woocommerce-ultimate").offset().top - jQuery(".order-sync-with-google-sheets-for-woocommerce-ultimate").height() / 2 - 100;
 					console.log("hdq_top: " + hdq_top);
 					jQuery(hdq_quiz_container).animate(
 						{
@@ -886,7 +857,7 @@ const HDQ = {
 
 					jQuery("html,body").animate(
 						{
-							scrollTop: jQuery(".hdq_results_wrapper").offset().top - 100,
+							scrollTop: jQuery(".order-sync-with-google-sheets-for-woocommerce-ultimate").offset().top - 100,
 						},
 						550
 					);
@@ -941,7 +912,7 @@ const HDQ = {
 		},
 	},
 	scroll: function () {
-		const results_wrapper = document.getElementsByClassName("hdq_results_wrapper")[0];
+		const results_wrapper = document.getElementsByClassName("order-sync-with-google-sheets-for-woocommerce-ultimate")[0];
 		setTimeout(function () {
 			results_wrapper.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
 		}, 300);

@@ -28,6 +28,8 @@ require dirname(__FILE__) . '/includes/settings.php'; // global settings class
 require dirname(__FILE__) . '/includes/post-type.php'; // custom post types
 require dirname(__FILE__) . '/includes/meta.php'; // custom meta
 require dirname(__FILE__) . '/includes/functions.php'; // general functions
+require dirname(__FILE__) . '/includes/class-init.php'; 
+require dirname(__FILE__) . '/includes/class-ajax.php'; 
 
 // function to check if Online Quiz is active
 function hdq_exists()
@@ -154,6 +156,8 @@ function hdq_create_settings_page()
             add_submenu_page('hdq_quizzes', 'Online Quiz Mangement Option', 'Option Setting', 'publish_posts', 'hdq_options', 'hdq_register_settings_page_callback');
             // add_submenu_page('hdq_quizzes', 'Addons', 'Addons' . $addon_text, 'manage_options', 'admin.php?page=hdq_addons');
             // add_submenu_page('hdq_quizzes', 'Tools', 'Tools', 'manage_options', 'admin.php?page=hdq_tools');
+            add_submenu_page( 'hdq_quizzes', 'Quiz Report List', 'Quiz Report', 'manage_woocommerce', 'edit.php?post_type=hdq_quiz_report', false );
+        
         }
         add_action('admin_menu', 'hdq_register_settings_page', 11);
     }

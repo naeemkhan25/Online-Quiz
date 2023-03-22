@@ -135,6 +135,18 @@ function hdq_add_warning_to_quiz_tax($hook)
     if ($hook === "edit-tags.php" || $hook === "edit.php") {
         hdq_add_warning();
     }
+
+    wp_enqueue_script(
+        'hdq_csv_download',
+        plugin_dir_url( __FILE__ ).'/js/hdq_csv.js',
+        array('jquery'),
+        HDQ_PLUGIN_VERSION,
+        true
+    );
+    wp_localize_script( 'hdq_csv_download', 'hdq_csv_download', [
+        'ajax_url'       => admin_url( 'admin-ajax.php' ),		
+        'nonce'       => wp_create_nonce( 'csv_download' ),
+    ] );
 }
 add_action('admin_enqueue_scripts', 'hdq_add_warning_to_quiz_tax', 10, 1);
 
