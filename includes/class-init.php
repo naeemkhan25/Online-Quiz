@@ -33,7 +33,7 @@ class Hdq_Register_PostType{
                 echo esc_html( $quiz_name );
                 break;
             case 'report':
-                echo sprintf('<div class="csv_download_section"><input type="hidden" id="download_post_id" value="%s"/><button class="hdq_csv_download" style="cursor:pointer;background-color:#547559;color:white">Download CSV</button></div>',$post_id);
+                echo sprintf('<div class="csv_download_section"><input type="hidden" id="download_post_id" value="%s"/><button class="hdq_csv_download" style="cursor:pointer;background-color:#547559;color:white">Download Report</button></div>',$post_id);
                 break;
         }
     }

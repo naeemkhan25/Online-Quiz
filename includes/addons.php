@@ -37,7 +37,7 @@ update_option("hdq_new_addon", array("no", $today)); // reset since we have seen
         <?php
 
         // TODO! convert to ajax for faster initial page load
-        $data = wp_remote_get("https://harmonicdesign.ca/addons/json/");
+        $data = wp_remote_get("");
 
         if (is_array($data)) {
             $data = $data["body"];

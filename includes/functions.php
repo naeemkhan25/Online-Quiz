@@ -557,7 +557,7 @@ function hdq_get_results($quiz_settings)
 
         <?php
         if (isset($settings["hd_qu_heart"]["value"]) && $settings["hd_qu_heart"]["value"][0] === "yes") {
-            echo '<p class = "hdq_heart">Online Quiz powered by <a href = "https://harmonicdesign.ca" target = "_blank" title = "Best WordPress Developers">harmonic design</a></p>';
+            echo '<p class = "hdq_heart">Online Quiz powered by <a href = "#" target = "_blank" title = "Best WordPress Developers">harmonic design</a></p>';
         }
         ?>
 

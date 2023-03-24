@@ -34,7 +34,6 @@
 							<p>Thank you for upgrading Online Quiz to v<?php echo HDQ_PLUGIN_VERSION;?>. <strong style = "font-weight: bold">This version requires updating your quiz and question data to be compatible with this version.</strong></p>
 							<p>If you have less than 60 questions, this should have already been done automaticaly. However, if you have more than 60 questions, or if you are experiencing any issues with your quiz settings, please run the manual upgrade tool located <a href = "<?php echo get_admin_url(null, "?page=hdq_tools_data_upgrade"); ?>">here</a>.</p>
 							<p>
-								<span class = "hdq_marker">If you still have issues <strong style = "font-weight: bold">do not panik</strong></span>. None of your quiz data has been removed or changed, and you can always <a href = "https://wordpress.org/plugins/hd-quiz/advanced/" target = "_blank">revert to a previous version of Online Quiz</a>, and of course, you can always <a href = "http://harmonicdesign.ca/hd-quiz/" target = "_blank">contact me for help and support</a>.
 							</p>
 							<p style = "text-align:center">							
 								<button class = "button" id = "hdq_update_data_notice" title = "dismiss this notification">

@@ -1,15 +1,12 @@
 <?php
 /*
-    * Plugin Name: Online Quiz Management System
-    * Description: Online Quiz Management System allows you to easily add an unlimited amount of Quizzes to your site.
-    * Plugin URI: https://harmonicdesign.ca/hd-quiz/
-    * Author: 
-    * Author URI: 
-    * Version: 1.8.7
+* Plugin Name: Online Quiz Management System
+* Description: Online Quiz Management System allows you to easily add an unlimited amount of Quizzes to your site.
+* Plugin URI: 
+* Author: Naeem Khan
+* Author URI: https://naeemkhan25.github.io/
+* Version: 1.8.7
 */
-
-// Want to change the new admin question pagination per-page?
-// add `define("HDQ_PER_PAGE", 200);` to your theme's functions.php (set 200 to your desired number)
 
 if (!defined('ABSPATH')) {
     die('Invalid request.');
@@ -191,7 +188,7 @@ function hdq_check_for_updates()
         $data = array("", "");
     }
 
-    $remote = wp_remote_get("https://harmonicdesign.ca/plugins/hd-quiz/addons.txt");
+    $remote = wp_remote_get("");
     if (is_array($remote)) {
         $remote = sanitize_text_field($remote["body"]);
         if ($remote > $data[1]) {

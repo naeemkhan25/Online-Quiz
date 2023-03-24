@@ -12,7 +12,8 @@
 
     // if randomize answer order is enabled, then the "correct" result will be chosen random too
     // so we account for this by just getting the question data again
-    if ($quiz["randomize_answers"]["value"][0] == "yes") {
+    $quiz_value = array_key_exists('randomize_answers', $quiz) ? $quiz["randomize_answers"]["value"][0]:'no';
+    if ($quiz_value == "yes") {
         $question = get_hdq_question($question["question_id"]["value"]);
     }
 
